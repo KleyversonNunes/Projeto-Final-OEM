@@ -1,0 +1,24 @@
+cliente:
+  nome: Cliente Zero
+  segmento: E-commerce
+
+aplicacao:
+  nome: SauceDemo
+  ambiente: homologacao
+  url: https://www.saucedemo.com
+
+testes:
+  regressao_login:
+    ativo: true
+    prioridade: alta
+
+  seguranca:
+    ativo: true
+    prioridade: media
+
+execucao:
+  frequencia: continuo
+  pipeline: github_actions
+
+sla:
+  entrega_relatorio_horas: 24
