@@ -18,7 +18,7 @@ jobs:
 
       - name: Instalar dependências (QAaaS)
         run: |
-          pip install pytest pytest-playwright pytest-html
+          pip install -r requirements.txt
           playwright install --with-deps
 
       - name: Executar Bateria de Testes de Regressão
