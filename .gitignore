@@ -1,8 +1,4 @@
-# Entra no seu repo oficial (substitua pelo nome real da pasta)
-cd caminho/do/seu/repo-oficial
-
-# Cria o .gitignore com os arquivos que o Git deve ignorar
-echo "venv/" > .gitignore
-echo "__pycache__/" >> .gitignore
-echo ".pytest_cache/" >> .gitignore
-echo "relatorio_qaaas.html" >> .gitignore
+venv/
+__pycache__/
+.pytest_cache/
+relatorio_qaaas.html
