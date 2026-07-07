@@ -1,32 +1,59 @@
+import yaml
+from pathlib import Path
+
 from playwright.sync_api import Page, expect
 
+
+def carregar_config():
+    caminho = Path("config/cliente_zero.yml")
+
+    with open(caminho, "r", encoding="utf-8") as arquivo:
+        return yaml.safe_load(arquivo)
+
+
 def test_checkout_sucesso(page: Page):
-    """
-    Testa o fluxo completo de compra de um usuário no e-commerce.
-    Valida a adição ao carrinho, preenchimento de dados e conclusão do pedido.
-    """
-    # 1. Realiza o Login (Pré-requisito)
-    page.goto("https://www.saucedemo.com/")
-    page.locator("[data-test='username']").fill("standard_user")
-    page.locator("[data-test='password']").fill("secret_sauce")
-    page.locator("[data-test='login-button']").click()
 
-    # 2. Adiciona o produto "Sauce Labs Backpack" ao carrinho
-    page.locator("[data-test='add-to-cart-sauce-labs-backpack']").click()
+    config = carregar_config()
 
-    # 3. Acessa o carrinho e valida se o produto está lá
-    page.locator(".shopping_cart_link").click()
-    expect(page.locator(".inventory_item_name")).to_have_text("Sauce Labs Backpack")
+    url = config["aplicacao"]["url"]
 
-    # 4. Inicia o processo de Checkout (Informações do Cliente)
-    page.locator("[data-test='checkout']").click()
-    page.locator("[data-test='firstName']").fill("Squad")
-    page.locator("[data-test='lastName']").fill("Operacoes")
-    page.locator("[data-test='postalCode']").fill("66075-110") # CEP genérico
-    page.locator("[data-test='continue']").click()
+    # 1. Acessa o ambiente do cliente
+    page.goto(url)
 
-    # 5. Confirma os valores e finaliza a compra
-    page.locator("[data-test='finish']").click()
+    # 2. Realiza o login
+    page.fill("[data-test='username']", "standard_user")
+    page.fill("[data-test='password']", "secret_sauce")
+    page.click("[data-test='login-button']")
 
-    # 6. Validação (A prova de que a compra deu certo)
-    expect(page.locator(".complete-header")).to_have_text("Thank you for your order!")
+    # 3. Valida se entrou no sistema
+    expect(page).to_have_url(f"{url.rstrip('/')}/inventory.html")
+
+    # 4. Adiciona o produto ao carrinho
+    page.click("[data-test='add-to-cart-sauce-labs-backpack']")
+
+    # 5. Acessa o carrinho
+    page.click(".shopping_cart_link")
+
+    # 6. Valida se o produto foi adicionado
+    expect(page.locator(".inventory_item_name")).to_have_text(
+        "Sauce Labs Backpack"
+    )
+
+    # 7. Inicia o checkout
+    page.click("[data-test='checkout']")
+
+    # 8. Preenche os dados do comprador
+    page.fill("[data-test='firstName']", "Squad")
+    page.fill("[data-test='lastName']", "Operacoes")
+    page.fill("[data-test='postalCode']", "66075-110")
+
+    # 9. Continua o processo
+    page.click("[data-test='continue']")
+
+    # 10. Finaliza a compra
+    page.click("[data-test='finish']")
+
+    # 11. Valida a conclusão do pedido
+    expect(page.locator(".complete-header")).to_have_text(
+        "Thank you for your order!"
+    )
