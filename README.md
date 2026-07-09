@@ -36,6 +36,11 @@ Para validar nosso processo crítico na prática, este MVP executa testes automa
 * **Relatórios:** `pytest-html` (Geração do Dashboard de SLA)
 * **Orquestração de Nuvem:** `GitHub Actions` (Containers Ubuntu)
 
+### Estrutura de Diretórios e Configuração Dinâmica
+O projeto foi desenhado para escalabilidade (padrão SaaS), separando regras de negócio da execução de código:
+* **Pasta `config/`:** Contém o arquivo `cliente_zero.yml`. É através deste arquivo que o time Comercial/Onboarding injeta dinamicamente a URL do cliente na automação, sem a necessidade de alterar ou conhecer programação.
+* **Pasta `tests/`:** Isola todos os scripts de validação (`test_login.py`, `test_checkout.py`, `test_integridade.py`, `test_persistencia.py`), mantendo a raiz do projeto limpa e pronta para receber novos clientes.
+
 ### Como a Esteira CI/CD Funciona
 A execução ocorre de forma 100% autônoma. Sempre que há uma alteração no código (*push*), o GitHub Actions engatilha nossa pipeline que realiza os seguintes passos:
 1. Provisiona um container Linux isolado.
@@ -52,7 +57,7 @@ Caso seja necessário depurar ou rodar os testes localmente em ambientes Linux (
 
 **1. Clone o repositório:**
 ```bash
-git clone [https://github.com/KleyversonNunes/Projeto-Final-OEM.git](https://github.com/KleyversonNunes/Projeto-Final-OEM.git)
+git clone https://github.com/KleyversonNunes/Projeto-Final-OEM.git
 cd Projeto-Final-OEM
 ```
 

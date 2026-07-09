@@ -5,7 +5,7 @@ on: [push]
 
 jobs:
   executar_testes:
-    runs-on: ubuntu-latest # O ambiente Linux prometido no seu projeto
+    runs-on: ubuntu-latest # O ambiente Linux de execução
     
     steps:
       - name: Baixar o repositório
@@ -22,7 +22,11 @@ jobs:
           playwright install --with-deps
 
       - name: Executar Bateria de Testes de Regressão
-        run: pytest --html=relatorio_qaaas.html --self-contained-html
+        run: pytest --html=relatorio_qaaas.html --self-contained-html --junitxml=resultados.xml
+
+      - name: Exibir Dashboard Executivo de KPIs
+        if: always() # Garante que o painel apareça mesmo se os testes falharem
+        run: python gerador_kpis.py
 
       - name: Salvar Relatório Dashboard (SLA 24h)
         uses: actions/upload-artifact@v4
