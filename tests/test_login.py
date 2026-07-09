@@ -5,7 +5,8 @@ from playwright.sync_api import Page, expect
 
 
 def carregar_config():
-    caminho = Path("config/cliente_zero.yml")
+    raiz_projeto = Path(__file__).parent.parent
+    caminho = raiz_projeto / "config" / "cliente_zero.yml"
 
     with open(caminho, "r", encoding="utf-8") as arquivo:
         return yaml.safe_load(arquivo)
