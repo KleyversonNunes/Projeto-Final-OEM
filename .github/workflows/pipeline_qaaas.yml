@@ -5,7 +5,7 @@ on: [push]
 
 jobs:
   executar_testes:
-    runs-on: ubuntu-latest # O ambiente Linux prometido no seu projeto
+    runs-on: ubuntu-latest # O ambiente Linux de execução
     
     steps:
       - name: Baixar o repositório
